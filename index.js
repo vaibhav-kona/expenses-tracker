@@ -1,3 +1,16 @@
+"use strict";
+
+// Add enum for expense type and expense name - DONE
+// Travel expenses - by date - DONE
+// Expense has type - meal, travel, entertainment etc - DONE
+// Each expenseType has sub types - meal -> breakfast, lunch, dinner - DONE
+// Calculate expense by type, date range - if type is not passed, it should calcualte and return total expenses instead
+// If an expense if over spent, log it in print
+
+// class for Expense - takes type, subtype, amount, data as input
+// class for Expense - takes typeName
+// add sub type for expense by passing subtypeName, maxSpendLimit
+
 class ExpenseSubType {
   constructor(displayName, maxSpendLimit) {
     this.displayName = displayName;
@@ -40,6 +53,81 @@ const EXPENSE_TYPES_META = {
   [EXPENSE_TYPES.MEAL]: EXPENSE_MEAL_TYPE_META,
   [EXPENSE_TYPES.TRAVEL]: EXPENSE_TRAVEL_TYPE_META,
 };
+
+const myExpenses = () => [
+  new Expense({
+    expenseType: EXPENSE_TYPES.TRAVEL,
+    expenseSubType: EXPENSE_TRAVEL_TYPES.CAR_RENTAL,
+    amount: 90,
+    dateOfExpense: "2023-04-15",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.MEAL,
+    expenseSubType: EXPENSE_MEAL_TYPES.BREAKFAST,
+    amount: 30,
+    dateOfExpense: "2023-04-15",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.MEAL,
+    expenseSubType: EXPENSE_MEAL_TYPES.LUNCH,
+    amount: 40,
+    dateOfExpense: "2023-04-15",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.MEAL,
+    expenseSubType: EXPENSE_MEAL_TYPES.DINNER,
+    amount: 80,
+    dateOfExpense: "2023-04-15",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.TRAVEL,
+    expenseSubType: EXPENSE_TRAVEL_TYPES.METRO,
+    amount: 10,
+    dateOfExpense: "2023-04-17",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.MEAL,
+    expenseSubType: EXPENSE_MEAL_TYPES.BREAKFAST,
+    amount: 30,
+    dateOfExpense: "2023-04-17",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.MEAL,
+    expenseSubType: EXPENSE_MEAL_TYPES.LUNCH,
+    amount: 60,
+    dateOfExpense: "2023-04-17",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.MEAL,
+    expenseSubType: EXPENSE_MEAL_TYPES.DINNER,
+    amount: 90,
+    dateOfExpense: "2023-04-17",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.TRAVEL,
+    expenseSubType: EXPENSE_TRAVEL_TYPES.BUS,
+    amount: 30,
+    dateOfExpense: "2023-04-20",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.MEAL,
+    expenseSubType: EXPENSE_MEAL_TYPES.BREAKFAST,
+    amount: 10,
+    dateOfExpense: "2023-04-20",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.MEAL,
+    expenseSubType: EXPENSE_MEAL_TYPES.LUNCH,
+    amount: 70,
+    dateOfExpense: "2023-04-20",
+  }),
+  new Expense({
+    expenseType: EXPENSE_TYPES.MEAL,
+    expenseSubType: EXPENSE_MEAL_TYPES.DINNER,
+    amount: 110,
+    dateOfExpense: "2023-04-20",
+  }),
+];
 
 class Expense {
   // private variables
@@ -214,7 +302,7 @@ class ExpenseReport {
     return dateFilteredExps;
   }
 
-  getReport({
+  getExpenses({
     expenseType,
     expenseSubType,
     startDate,
@@ -243,21 +331,61 @@ class ExpenseReport {
     });
     if (logToScreen) {
       let logTxt = "";
-      if (exps.length > 0) {
-        exps.forEach((exp) => (logTxt += exp.getLogToScreenTxt() + "\n"));
-      }
-      console.info(logTxt || "No expenses found for filters passed");
+      exps.forEach((exp) => (logTxt += exp.getLogToScreenTxt() + "\n"));
+      console.info(logTxt);
     }
     return { total, totalScreenLog, expenses: exps };
   }
 }
 
-// export default ExpenseReport
+const myExpenseReport = new ExpenseReport(myExpenses());
 
-export default {
-  Expense,
-  ExpenseReport,
-  EXPENSE_TRAVEL_TYPES,
-  EXPENSE_TYPES,
-  EXPENSE_MEAL_TYPES,
-};
+console.log({
+  exppp: myExpenseReport.getExpenses({
+    expenseType: EXPENSE_TYPES.MEAL,
+    logToScreen: true,
+  }),
+});
+console.log({
+  exppp: myExpenseReport.getExpenses({
+    expenseType: EXPENSE_TYPES.MEAL,
+    expenseSubType: EXPENSE_MEAL_TYPES.BREAKFAST,
+  }),
+});
+console.log({
+  exppp: myExpenseReport.getExpenses({
+    expenseSubType: EXPENSE_MEAL_TYPES.BREAKFAST,
+  }),
+});
+console.log({
+  exppp: myExpenseReport.getExpenses({ expenseType: EXPENSE_TYPES.TRAVEL }),
+});
+console.log({
+  exppp: myExpenseReport.getExpenses({ startDate: "2023-04-30" }),
+});
+console.log({
+  exppp: myExpenseReport.getExpenses({ startDate: "2023-04-10" }),
+});
+console.log({ exppp: myExpenseReport.getExpenses({ endDate: "2023-04-30" }) });
+console.log({ exppp: myExpenseReport.getExpenses({ endDate: "2023-04-10" }) });
+console.log({
+  exppp: myExpenseReport.getExpenses({
+    startDate: "2023-04-10",
+    endDate: "2023-04-15",
+  }),
+});
+console.log({
+  exppp: myExpenseReport.getExpenses({
+    startDate: "2023-04-10",
+    endDate: "2023-04-25",
+  }),
+}); // total
+console.log({
+  exppp: myExpenseReport.getExpenses({
+    startDate: "2023-04-25",
+    endDate: "2023-04-30",
+  }),
+});
+console.log({
+  exppp: myExpenseReport.getExpenses({ isOverSpent: true, logToScreen: true }),
+});
