@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.html",
+  "type": "module",
   "scripts": {
     "start": "nodemon index.js",
     "build": "echo This is a static template, there is no bundler or bundling involved!"
